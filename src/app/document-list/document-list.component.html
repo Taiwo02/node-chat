@@ -1,0 +1,17 @@
+          <div  class=" container row"> 
+              <!-- <div > -->
+                    <div  *ngFor='let list of groups' class="col-12 col-lg-4 col-md-2">  
+                    <div  class=" mb-5 mt-3">
+                    <div class="card-header shadow">
+                     <button class="btn text-success" (click)="sendgroup(list.title)">
+                     <strong >{{list.title}}</strong> 
+                    </button> 
+                    </div>
+                    </div> 
+                    </div> 
+                    <div> 
+                    </div>
+                    <div class="container  fixed-bottom">
+                      <button routerLink="/document/group" class="btn btn-success float-right">Create group</button>
+                    </div>
+                   </div>                                    

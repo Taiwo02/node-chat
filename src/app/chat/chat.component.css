@@ -1,0 +1,18 @@
+.card{
+    border-radius: 10px;
+    }
+    .card-header{
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        background-color: rgb(47, 194, 113);
+    
+    }
+    .card-body{
+        /* border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px; */
+        border-radius: 10px;
+        background-color: rgb(88, 236, 162)
+    }
+    .spacer{
+        flex: 1 1 auto;
+    }

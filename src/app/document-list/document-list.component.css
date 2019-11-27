@@ -1,0 +1,18 @@
+#inp{
+    border-radius:10px;
+    border: none;
+    outline: none;
+}
+.ly{
+    padding-right:50px;
+}
+    .spacer{
+        flex: 1 0 auto;
+    }
+    .card-header{
+        height: auto;
+        border-radius: 10px;
+        color: rgb(140, 233, 140);
+        /* background-color:; */
+      }
+     

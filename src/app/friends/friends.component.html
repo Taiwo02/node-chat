@@ -1,0 +1,10 @@
+<div  class=" container row"> 
+        <!-- <div > -->
+              <div  *ngFor='let fried of friends' class="col-12 col-lg-4 col-md-2">  
+              <div  class=" mb-2 mt-3" [hidden]="fried.second == user">
+              <div class="card-header shadow text-center">
+               <strong routerLink="/chat" class=" text-success " (click)="friedname(fried.second)">{{fried.second}}</strong>  
+              </div>
+              </div> 
+              </div> 
+             </div>    

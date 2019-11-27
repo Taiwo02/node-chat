@@ -1,0 +1,24 @@
+<nav class="col-12  bg-success" style="height:30px">
+<p class="center">Sign up</p>
+</nav>
+<div class="container">
+  <div class="container row"> 
+    <div class="col-md-3"></div>  
+  <form [formGroup]="regform"  novalidate (ngSubmit)="submite()" class="col-12 col-lg-6 shadow mt-3">
+    <p class="text-center">
+      <strong>signup!</strong>
+    </p>
+    <div class="container">
+      <h5> FirstName:</h5><input class="shadow mb-2" type="text" [class.incorrect]="firstName.touched && firstName.invalid" formControlName="firstName"><br>
+      <h5>LastName:</h5><input class="shadow mb-2" type="text"  [class.incorrect]="lastName.touched && lastName.invalid" formControlName="lastName"><br>
+      <h5> Email:</h5><input class="shadow mb-2" type="email"  [class.incorrect]="email.touched && email.invalid" formControlName="email"><br>
+      <h5>Password:</h5> <input class="shadow mb-2" type="password"  [class.incorrect]="password.touched && password.invalid" formControlName="password">
+      <h5>Phone:</h5><input class="shadow mb-2" type="number"  [class.incorrect]="phone.touched && phone.invalid" formControlName="phone">
+      <h5>Image:</h5><input class="shadow mb-2" (change)="test($event)" type="file" name="img" ([ngModel])="img"><br>      
+      <button class="btn btn-success" [disabled]="regform.invalid ||submitted">
+        Submit
+      </button>
+    </div>
+  </form>
+  </div>
+</div>      

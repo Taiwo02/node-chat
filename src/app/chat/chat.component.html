@@ -1,0 +1,35 @@
+<nav class="col-12 fixed-top mb-4 bg-success text-center text-light" style="height:30px">
+        <p class="center">{{name}}</p>
+        </nav>
+        <div style="width: 100%; height:50px;"></div>
+        <div class="container">
+            <div>
+                <div *ngFor="let item of viewer" class="row mb-4">
+                        <p [class.spacer]="item.sender == user"></p>
+                        <div class="col-8 col-lg-4">
+                        <div class="card mb-4  shadow">
+                        <div class="card-body" >
+                            {{item.message}}
+                        </div>
+                        </div>
+                        </div>
+                     </div>
+                    </div>
+            <div *ngFor="let list of view" class="row mb-4">
+                    <p [class.spacer]="list.user == user"></p>
+                    <div class="col-6 col-lg-4">
+                    <div class="card mb-4  shadow"   >
+                    <div class="card-body" [class.conf]="list.sernder == user && list.reciever == name || list.sernder == name && list.reciever == user" >
+                        {{list.message}}
+                    </div>
+                    </div>
+                    </div>
+                 </div>
+        </div>
+        <div class="container">
+                <div class="row fixed-bottom">
+                   <p class="spacer col-12 col-lg-3"></p>
+                    <input type="text" name="" id="" class="col-8 col-lg-6 shadow"[(ngModel)]="message">
+                    <input type="button" value="Send" class="btn btn-success btn-sm col-4 col-lg-1" (click)="send()">
+                </div>
+            </div>

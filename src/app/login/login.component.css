@@ -1,0 +1,21 @@
+form{
+    border-radius: 10px;
+}
+form input{border-radius: 10px;}
+.spaser{
+    flex: 1 0 auto
+}
+.incorrect{
+    border: 2px solid red;
+}
+#myModal{
+display: flex;
+justify-content:space-around;
+/* align-content: space-around; */
+}
+@media screen and (max-width:500px) {
+form input {font-size:18px;}
+form h4 {font-size:18px;}
+form button{font-size:15px;}
+.cont button{font-size:12px; margin-left:5px;}
+}

@@ -1,0 +1,32 @@
+     <nav class="col-12  bg-success" style="height:50px">
+        <p class="text-center text-light">Sign in</p>
+        </nav>
+        <div class=" container row mt-5" style="width: 100%">
+            <div class=" col-4 col-lg-4"></div>
+            <form [formGroup]="regform" novalidate (ngSubmit)="submite()"   class="  col-12 ml-3  col-lg-4 col-md-8 shadow" >
+              <p class="alert alert-danger text-center" [hidden]="show">{{response}}</p>
+              <div class="container">
+             <h4> Email:<input type="email" [(ngModel)]="emai" class="shadow" [class.incorrect]="email.touched && email.invalid" formControlName="email"></h4>
+              <h4>Password:<input type="password" [(ngModel)]="passwor" class="shadow" [class.incorrect]="password.touched && password.invalid" formControlName="password"></h4><br>
+              <button class="btn btn-success float-right mb-4" [disabled]="regform.invalid ||submitted" data-toggle="modal" data-target="#myModal">
+                    Submit
+                </button>
+            </div>
+        </form>
+        <div class="container">
+        <div class="container cont row  col-12">
+                <div class=" col-lg-4"></div>
+            <button routerLink="/main" class="btn btn-success mb-3 mt-5 col-lg-2 shadow col-6">Forgot password</button>
+            <button routerLink="/register" class="btn btn-success mb-3 mt-5 col-5 col-lg-2  shadow">Create Account</button>
+        </div>
+        </div>
+    </div>
+             <div class="container row">
+                <div id="contain" >
+                 <span class=" fa fa-spin" *ngIf="submitted" style="margin-left:10px;font-size:20px;"><i class="fa fa-spinner"></i></span>
+                </div>
+
+             </div>
+                
+
+      

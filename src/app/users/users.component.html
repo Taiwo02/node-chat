@@ -1,0 +1,17 @@
+<div  class=" container row"> 
+  <!-- <div >
+      <small class="text-dark">{{messageArray.user}}</small>
+      <small class="text-dark">{{messageArray.message}}</small>
+  </div> -->
+              <div  *ngFor='let fried of users' class="col-12 col-lg-4 col-md-2">  
+              <div  class=" mb-5 mt-3"  [hidden]="fried.firstname == first">
+              <div class="card-header shadow">
+               <button  class="btn text-success"  >
+               <strong >{{fried.firstname}}</strong>  
+               </button>
+                 <input type="button"  (click)="user(fried.firstname)"  value="add" class=" btn btn-success" style="float:right; outline: none;">
+                 <!-- <input class="float-right" type="button" name="" id="" value="Leave" class="ml-1 btn btn-danger" (click)="leave()">  -->
+              </div>
+              </div> 
+              </div> 
+             </div>   
