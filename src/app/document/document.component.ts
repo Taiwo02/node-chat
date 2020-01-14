@@ -3,6 +3,8 @@ import {DocumentService} from '../../document.service';
 import {Subscription} from 'rxjs';
 import {Document} from '../../document';
 import {startWith} from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Navigation } from 'selenium-webdriver';
 
 
 @Component({
@@ -12,7 +14,8 @@ import {startWith} from 'rxjs/operators';
 })
 export class DocumentComponent implements OnInit {
   document: Document;
-  constructor(private documentService: DocumentService) { }
+  constructor(private documentService: DocumentService, private router:Router) { }
   ngOnInit() {
+      // this.router.navigate(["/document/posts"])
    }
 }

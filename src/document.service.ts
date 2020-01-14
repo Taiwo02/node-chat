@@ -6,6 +6,7 @@ import {Groups} from './groups';
 import {Friends} from './groups'
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,12 @@ export class DocumentService {
   public groupname;
   user:String;
   groups = Groups;
-  constructor(private socket: Socket) { }
+  fileString:any= "";
+  views:Array<{user:String, message:String}>=[]
+  constructor(private socket: Socket,) {
+    console.log(this.views)
+   }
+  
   joinroom(data){
     this.socket.emit('join',data);
   }
@@ -29,12 +35,22 @@ export class DocumentService {
     })
     return observable;
   }
-  users(){
-    this.socket.emit("users")
+ 
+  users(data){
+    this.socket.emit("users",data)
   }
   allusers(){
     let observable = new Observable<{users}>(observer=>{
       this.socket.on('all users',(data)=>{
+        observer.next(data);
+      })
+      return ()=>{this.socket.disconnect()}
+    })
+    return observable;
+  }
+  allFriends(){
+    let observable = new Observable<{response}>(observer=>{
+      this.socket.on('all friends',(data)=>{
         observer.next(data);
       })
       return ()=>{this.socket.disconnect()}
@@ -91,7 +107,7 @@ sendmessage(data){
   this.socket.emit('message',data)
 }
 newmessagerecieved(){
-  let observable = new Observable<{user:String,message:String}>(observer=>{
+  let observable = new Observable<{user:String,message:String,image:String,room:String}>(observer=>{
     this.socket.on('new message',(data)=>{
       observer.next(data);
     })
@@ -113,8 +129,30 @@ newfriendmessage(){
   })
   return observable;
 }
-privatechat(data){
+senderfriendmessage(){
+  let observable = new Observable<{user:String, message:String,image:String}>(observer=>{
+    this.socket.on('sender friendmessage',(data)=>{
+      observer.next(data);
+    })
+    return ()=>{this.socket.disconnect()}
+    
+  })
+  return observable;
+}
+privatechat(data){  
   this.socket.emit('privatechatroom',data)
+}
+senderonline(){
+  let observable = new Observable<{online:String}>(observer=>{this.socket.on('sender online',(data)=>{ observer.next(data); })
+  return ()=>{this.socket.disconnect()}});return observable;
+}
+ online(){
+  let observable = new Observable<{online:String}>(observer=>{this.socket.on('online',(data)=>{ observer.next(data); })
+  return ()=>{this.socket.disconnect()}});return observable;
+}
+offline(){
+  let observable = new Observable<{offline:String}>(observer=>{this.socket.on('offline',(data)=>{ observer.next(data); })
+  return ()=>{this.socket.disconnect()}});return observable;
 }
 privatechatleft(data){
   this.socket.emit('privatechatleft',data)
@@ -152,6 +190,32 @@ messagedisplay(){
   
     })
     return observable;
+  }
+  profileImage(data){
+    this.socket.emit('profileImage',data)
+  }
+  newProfileImage(){
+      let observable = new Observable<{result}>(observer=>{
+        this.socket.on('new profileImage',(data)=>{
+          observer.next(data);
+        })
+        return ()=>{this.socket.disconnect()}
+    
+      })
+      return observable;
+  }
+  fetchdata(data){
+    this.socket.emit('fetchdata',data)
+  }
+  newdata(){
+      let observable = new Observable<{result}>(observer=>{
+        this.socket.on('new data',(data)=>{
+          observer.next(data);
+        })
+        return ()=>{this.socket.disconnect()}
+    
+      })
+      return observable;
   }
   login(data){
     this.socket.emit('login',data)

@@ -1,0 +1,12 @@
+
+label{
+    /* font-size: 20px; */
+    padding: 5px;
+    background:green; 
+    display: table;
+    color: #fff;
+     }
+
+.img label input[type="file"] {
+    display: none;
+}

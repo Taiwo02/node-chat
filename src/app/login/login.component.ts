@@ -24,9 +24,11 @@ export class LoginComponent implements OnInit {
   constructor(private router:Router,private documentservice:DocumentService,private fb:FormBuilder) { 
     this.documentservice.newlogin().subscribe(data => {
       if (data.Object!="") {
-        console.log(data)
+        // window.localStorage.test = JSON.stringify({data:{result:{firstname:}}});
      window.localStorage.test = JSON.stringify({data});
-        this.router.navigate(["/document"])
+    //  console.log(data.Object.result.firstname)
+    //  window.localStorage.test = JSON.stringify({data:{result:{firstname:result,}}});
+        this.router.navigate(["/document/posts"])
       } else if (data.Object===""){
         console.log(data)
         this.router.navigate(["/login"])
@@ -37,10 +39,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.user=(JSON.parse(localStorage.test).firstname);
+  this.user=(JSON.parse(localStorage.test).firstname);
   if (this.user !="") {
-    this.router.navigate(["/document"])   
-  } 
+    this.router.navigate(["/document/posts"])   
+  }
   }
   regform=this.fb.group({
     email:['',[Validators.required,Validators.email]],

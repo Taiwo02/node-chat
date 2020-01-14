@@ -4,10 +4,15 @@
         <div class=" container row mt-5" style="width: 100%">
             <div class=" col-4 col-lg-4"></div>
             <form [formGroup]="regform" novalidate (ngSubmit)="submite()"   class="  col-12 ml-3  col-lg-4 col-md-8 shadow" >
-              <p class="alert alert-danger text-center" [hidden]="show">{{response}}</p>
+                <!-- <div [hidden]="showAllert">
+                    <p  class="alert alert-danger text-center" >{{response}}</p>
+                </div> -->
+             <div class="alert alert-danger" style="width:80%" [hidden]="show" >
+                    <span> {{response}}</span>
+                  </div>
               <div class="container">
-             <h4> Email:<input type="email" [(ngModel)]="emai" class="shadow" [class.incorrect]="email.touched && email.invalid" formControlName="email"></h4>
-              <h4>Password:<input type="password" [(ngModel)]="passwor" class="shadow" [class.incorrect]="password.touched && password.invalid" formControlName="password"></h4><br>
+             <h4> Email:<br><input type="email" [(ngModel)]="emai"  [class.incorrect]="email.touched && email.invalid" formControlName="email"></h4>
+              <h4>Password:<input type="password" [(ngModel)]="passwor"  [class.incorrect]="password.touched && password.invalid" formControlName="password"></h4><br>
               <button class="btn btn-success float-right mb-4" [disabled]="regform.invalid ||submitted" data-toggle="modal" data-target="#myModal">
                     Submit
                 </button>

@@ -9,6 +9,7 @@
     .spacer{
         flex: 1 0 auto;
     }
+    .no{display: none;}
     .card-header{
         height: auto;
         border-radius: 10px;

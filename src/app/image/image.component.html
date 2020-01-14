@@ -1,0 +1,24 @@
+<nav class="nav bg-success tex-center  text-light mb-4" >
+ <p  style="text-align: center;">{{detail.firstname}}</p>
+</nav>
+
+<div class="img" >
+    <img src="{{image.image}}" class="col-6 col-lg-2" style="height:150px; border-radius: 100%;">
+    <small>{{detail.firstname}}</small>
+    {{image.image}}
+    <label> Edit
+            <input type="file" size="60" (change)="changeImage($event)" >
+            </label> 
+    <!-- <p>edit</p>   -->
+</div>
+<div style="text-align: center;">
+    <form>
+<div>
+<input class="shadow mb-2" multiple (change)="test($event)" type="file" name="img" ([ngModel])="img"><br> 
+</div>
+<br>
+<button type="submit" (click)="onSubmit()">upload</button><br>
+<!-- image <img src="{{img.file}}" alt=""> -->
+    </form>
+
+</div>

@@ -10,15 +10,15 @@ export class FriendsComponent implements OnInit {
   user;
  friends;
   constructor(private documentservice:DocumentService) {
-    this.documentservice.friends().subscribe(data => this.friends=data)
+    this.documentservice.friends().subscribe(data => {console.log(data); this.friends=data})
   }
  
   ngOnInit() {
   this.user = this.documentservice.user;
-  this.documentservice.friend(this.user)
+  this.documentservice.friend({user:this.user})
   }
   friedname(friend){
-    this.documentservice.privatechat({sender:this.user,reciever:friend})
+    // this.documentservice.privatechat({sender:this.user,reciever:friend})
     localStorage.friend = JSON.stringify({name:friend});
   }
 

@@ -14,6 +14,7 @@ import { Route } from '@angular/compiler/src/core';
 export class FirstNavComponent implements OnInit{
   // userArray:Array<{firstname:String}>=[];
   public username;
+  public result;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
@@ -23,16 +24,23 @@ export class FirstNavComponent implements OnInit{
     notification
 
   constructor(private breakpointObserver: BreakpointObserver,private documentService: DocumentService,private router:Router) {
-    this.documentService.newregister().subscribe(data =>this.details=data)
-    this.documentService.createGroup().subscribe(data => {this.notification = data;console.log(data)})
+    // setInterval((()=>{this.progress(); }),500);
+    this.documentService.newdata().subscribe(data => {
+      console.log(data)
+      this.result=data.result;
+    })
   }
   ngOnInit() {
     this.username=(JSON.parse(localStorage.test).data.result.firstname);
+    this.documentService.fetchdata(this.username);
   }
   logout(){
     (delete(localStorage.test));
     this.router.navigate(["/login"])
   };
+  progress(){
+    console.log( this.documentService.views);
+  }
   
 
 }

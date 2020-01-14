@@ -1,7 +1,9 @@
 form{
     border-radius: 10px;
+    background-color: white;
+    padding-top: 20px;
 }
-form input{border-radius: 10px;}
+form input{border-radius:5px;outline: none; background-color:inherit;}
 .spaser{
     flex: 1 0 auto
 }

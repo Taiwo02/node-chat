@@ -25,7 +25,7 @@ export class DocumentListComponent implements OnInit {
     this.documentServise.groupname=a;
     this.documentServise.user=this.user;
     window.localStorage.group = JSON.stringify({user:this.user,groupname:a});
-    this.router.navigate(['/groupchat'])
+    this.router.navigate(['/friend'])
   }
   
 }
