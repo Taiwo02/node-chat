@@ -15,7 +15,7 @@ var female;
 app.use(cors({origin:"*"}));
 app.use(bodypasser.json())
 app.use(express.static(path))
-const server = app.listen(1992,(res,err)=>{
+const server = app.listen(process.env.PORT || 1992,(res,err)=>{
   if(err){console.log(err)}
   console.log('started');
   
