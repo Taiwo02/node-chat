@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "nodemon chat.js",
+     "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node chat.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
