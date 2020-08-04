@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "serve": "node chat.js",
+    "start": "node chat.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
