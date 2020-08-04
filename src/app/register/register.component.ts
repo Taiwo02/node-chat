@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
   show:boolean=true;
   img;
   imgs;
+  register_verification;
   // gender;
   response:string="Are you sure you are okay with this";
   showAlert:boolean=true;
@@ -25,7 +26,25 @@ export class RegisterComponent implements OnInit {
               private documentservice:DocumentService,
               private router:Router,
               // private http:HttpClient,
-    ) { }
+    ) {
+      this.documentservice.newregister().subscribe(data=>{
+        this.submitted=true;
+        // console.log(data)
+        if (data.error) {
+          setTimeout(()=>{
+            this.submitted=false;
+             this.register_verification='This email has already been used';
+            },5000)
+        }
+        else if (data.success) {
+          setTimeout(()=>{
+           this.submitted=false;
+            this.router.navigate(["/login"]) 
+           },5000)
+          
+        }
+      })
+     }
   regform=this.fb.group({
     firstName:['',[Validators.required]],
     lastName:['',[Validators.required]],
@@ -50,18 +69,8 @@ export class RegisterComponent implements OnInit {
     // } 
   }
  submite():void{
-  console.log(this.regform.value.gender)
-  // this.submitted=true;
-  console.log(this.img)
   this.documentservice.register({firstname:this.regform.value.firstName,lastname:this.regform.value.lastName,email:this.regform.value.email,password:this.regform.value.password,phone:this.regform.value.phone,gender:this.regform.value.gender});
-  this.showAlert=false;
-this.show=false;
- this.submitted=true;
- window.localStorage.test = JSON.stringify({data:{result:{firstname:this.regform.value.firstName,}}});
- this.router.navigate(["/document/posts"])   
-  }
-  no(){
-    this.submitted=false;
+//  window.localStorage.test = JSON.stringify({data:{result:{firstname:this.regform.value.firstName,}}});  
   }
  
 

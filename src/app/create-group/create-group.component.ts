@@ -9,7 +9,7 @@ import { Friends } from 'src/groups';
 })
 export class CreateGroupComponent implements OnInit {
   friends
-  user
+  public user
   notification
   groupname;
   discription;
@@ -17,22 +17,23 @@ export class CreateGroupComponent implements OnInit {
   friendArray:Array<{friend:String}>=[]
   constructor( private documentservice:DocumentService) {
     this.documentservice.friends().subscribe(data => {this.friends = data; console.log(data)})
-    this.documentservice.createGroup().subscribe(data => this.notification = data)
+    this.documentservice.createGroup().subscribe(data => {
+      this.notification = data
+    })
    }
 
   ngOnInit() {
-    this.user = this.documentservice.user;
-    this.documentservice.friend(this.user)
-  this.inp=false;
-
+    this.user = JSON.parse(localStorage.test).data.result.firstname;
   }
   friedname(a){
    this.friendArray.push(a)
    console.log(this.friendArray)
   }
-  create(){
-    this.documentservice.create({user:this.user,groupname:this.groupname,discription:this.discription})
-  this.inp=true;
+  creat(){
+    if (this.user && this.groupname ) {
+      this.documentservice.create({user:this.user,name:this.groupname,discription:this.discription})
+    this.inp=true;
+    }
 
   }
 

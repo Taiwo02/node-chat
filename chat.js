@@ -8,124 +8,216 @@ const bodypasser = require('body-parser');
 var imgPath = './public/upload/noimage.jpg';
 const multer = require('multer');
 const upload = multer({dest:'uploads/'})
-const path = require('path').join(__dirname + '/src/assets/images');
+const path = require('path').join(__dirname +'/public');
 const cors = require('cors')
+var usersProjection = { 
+  __v: false,
+  _id: false,
+  password:false,
+};
 
 var female;
 app.use(cors({origin:"*"}));
 app.use(bodypasser.json())
 app.use(express.static(path))
-const server = app.listen(1992,(res,err)=>{
+app.use(express.static(__dirname+'/dist'))
+const server = app.listen(process.env.PORT || 1992,(res,err)=>{
   if(err){console.log(err)}
   console.log('started');
   
 });
-    app.get('/',(req,res)=>{
-      res.send('home page')
-    })
+    // app.get('/',(req,res)=>{
+    //   res.send('home page')
+    // })
 const storage = multer.diskStorage({
-  destination:(req,file,callback) =>{
-    callback(null,__dirname+"/src/assets/images")
-  },
-  filename:(req,file,callback)=>{
+    destination:(req,file,callback) =>{
+    callback(null,__dirname+"/public/upload")
+    },
+    filename:(req,file,callback)=>{
      callback(null, Date.now()+file.originalname)
-   }
+     }
   })
-  var contents;
-var uploads =multer({storage:storage});
-mongoose.connect('mongodb://localhost/local', { useNewUrlParser: true,useUnifiedTopology: true  });
+  var uploads =multer({storage:storage});
+
+const store = multer.diskStorage({
+    destination:(req,file,callback) =>{
+    callback(null,__dirname+"/public/posts")
+    },
+    filename:(req,file,callback)=>{
+     callback(null, Date.now()+file.originalname)
+     }
+  })
+  var images = multer({storage:store});
+mongoose.connect('mongodb://localhost/local', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
   let user_schema= mongoose.Schema({
-    firstname:{type:String,require:true,},
-    lastname:{type:String,require:true}, 
-    email:{type:String,require:true,}, 
-    password:{type:String,require:true},
-    phone:{type:Number,require:true},
-    gender:{type:String,require:true},
-    image:{type:String,require:true},
+    firstname:{type:String,require:true,unique:false,},
+    lastname:{type:String,require:true,unique:false,}, 
+    email:{type:String,require:true,unique:true,}, 
+    password:{type:String,require:true,unique:false,},
+    phone:{type:Number,require:true,unique:true,},
+    gender:{type:String,require:true,unique:false,},
+    image:{type:String,require:true,unique:false,},
   })
   const chatModel = mongoose.model('users',user_schema)
-   let chat_schema= mongoose.Schema({user:String, room:String,message:String,image:String})
+   let chat_schema= mongoose.Schema({
+     user:{type:String,require:true}, 
+     room:{type:String,require:true},
+     message:{type:String,require:true},
+     image:{type:String,require:true},
+     time:{type:String,require:true},
+     name:{type:String,require:true}
+    })
    const chat = mongoose.model('chats',chat_schema)
-   let joining_schema= mongoose.Schema({user:String, room:String,message:String})
+   let joining_schema= mongoose.Schema({user:String, room:String})
    const joining = mongoose.model('joins',joining_schema)
    let  groupjoins_schema= mongoose.Schema({first:String,second:String})
    const  groupjoins = mongoose.model('groupjoins',groupjoins_schema)
-   let  friendchat_schema= mongoose.Schema({sender:String,reciever:String,message:String})
+   let  friendchat_schema= mongoose.Schema({sender:String,reciever:String,message:String,image:String})
    const friendchat  = mongoose.model('friendchats',friendchat_schema)
-   let  group_schema= mongoose.Schema({sender:String,reciever:String,message:String})
-   const group  = mongoose.model('friendchat',group_schema)
-   let  create_schema= mongoose.Schema({creator:String,groupname:String,discription:String})
-   const create = mongoose.model('chatmes', create_schema)
+   let  group_schema= mongoose.Schema({creator:{type:String,},name:{type:String,unique:true},discription:{type:String}})
+   const group  = mongoose.model('group',group_schema)
+   let post_schema = mongoose.Schema({image:String,text:String,time:String,name:String,userimage:String,email:String})
+   const post = mongoose.model('posts',post_schema)
+   let comment_schema = mongoose.Schema({post_id:String,text:String,time:String,name:String,userimage:String,email:String})
+   const comment = mongoose.model('comments',comment_schema)
+  //  let  create_schema= mongoose.Schema({creator:String,groupname:String,discription:String})
+  //  const create = mongoose.model('chatmes', create_schema)
   
 
 const io = require('socket.io')(server);
 io.on("connection", (socket) => {
+  socket.emit("connected",{message:"You have connected"})
+  console.log("connected")
+  socket.on("disconnect",(socket)=>{
+    io.emit("left",{message:"disconnected"})
+    console.log('discconected')
+  })
   socket.on("users",(data)=>{
-    chatModel.find((err,users)=>{
+    chatModel.find({},usersProjection,(err,users)=>{
     socket.emit("all users",users)
  })
     // groupjoins.find({first:data.first},(err,response)=>{
     //   socket.emit("all friends",response)
     // })
   })
+ 
   socket.on("friend",(data)=>{
-    groupjoins.find({first:data.user},(err,users)=>{
-    socket.emit("friends",users)
+    let friends = []
+    groupjoins.find({first:data.user},(err,friend)=>{
+      friend.map(s=>{
+        chatModel.findOne({email:s.second},usersProjection ,(err, res)=>{
+          friends.push(res);
+          socket.emit("friends",friends)
+      })
+      })
  })
 })
   socket.on("add",(data)=>{
+    // console.log(data)
+    var usersdeduct = { 
+      __v: false,
+      _id: false,
+      password:false,
+      phone:false,
+      email:false,
+      image:false,
+      lastname:false
+    };
     groupjoins.findOne({first:data.first,second:data.second},(err,response)=>{
-       if (!err && response) {
-         socket.emit('added friend',{user:response.second, message:"is your friend already"})
-       }
-       else if(!err && !response){
-         const friend =  new  groupjoins({
-          first:data.first,
-          second:data.second
+      if (!err && response) {
+        chatModel.findOne({email:data.second},usersdeduct,(err,res)=>{
+            console.log(res.firstname)
+            socket.emit('added friend',{user:res.firstname, message:"is your friend already"})
           })
-          friend.save();
-          socket.emit('added',{user:data.second, message:"has successfully add to your friend"})        
-       }
-    })
+        }
+        else if(!err && !response){
+          const friend =  new  groupjoins({
+           first:data.first,
+           second:data.second
+           })
+           friend.save();
+        chatModel.findOne({email:data.second},usersdeduct,(err,res)=>{
+
+           socket.emit('added',{user:res.firstname, message:"has successfully add to your friend"})  
+          })
+
+        }
+     })
+
+   
     // chatModel.find({$or:[{firstname: data.first,},{firstname:data.second}]},(err,user)=>{console.log(user) })
 
 })
+socket.on('joingroup',(data)=>{
+  data.rooms.map(info=>{
+    let groupjoin = new joining({
+     user:data.user,
+     room:info
+    })
+    groupjoin.save();
+  })
+  // socket.broadcast.to(data.room)
+  // .emit('new user joined',{user:data.user,message:'has joined the group'})
+  })
  socket.on('join',(data)=>{
+   console.log(data)
+   socket.emit('new user joined',{user:data.user,message:'has joined the group'})
    socket.join(data.room);
-   socket.broadcast.to(data.room)
-   .emit('new user joined',{user:data.user,message:'has joined the group'})
    })
  socket.on('left',(data)=>{
   socket.broadcast.to(data.room).emit('left room',{user:data.user,message:' has left this group'});
    socket.leave(data.room);
 })
-   socket.on ('message on',async(data)=>{
-   await io.in(data.room,
-   chat.find({room:data.room},async(err,result)=>{
-     if(err) throw err;
-     socket.emit('displaymessage',result)
-      }))
-    })
+socket.on ('message on',async(data)=>{
+  let userArray={
+    _v:false,
+    _id:false
+  }
+  await io.in(data.room,
+    chat.find({room:data.room}, userArray,async(err,result)=>{
+      if(err) throw err;
+    socket.emit('displaymessage',result)
+  }))
+})
     socket.on('message',(data)=>{
-      chatModel.findOne({firstname:data.user},(err,result)=>{
-      io.in(data.room).emit('new message',{user:data.user,message:data.message,image:result.image,room:data.room})  
-      let message = new chat({user:data.user,room:data.room,message:data.message,image:result.image})
+      let date_ob = new Date();
+      let p="";
+      let date = ("0" + date_ob.getDate()).slice(-2);
+      // current month
+     let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+// current year
+    let year = date_ob.getFullYear();
+// current hours
+   let hours = date_ob.getHours();
+// current minutes
+     if (hours<=11) {
+       p="am"
+     }
+     if (hours>=12) {
+      p="pm"
+    }
+   let minutes = date_ob.getMinutes();
+   if (minutes<10) {
+     minutes = "0"+minutes; 
+   }
+// current seconds
+   let seconds = date_ob.getSeconds();
+   let time =year + "-" + month + "-" + date + " " + hours%12 + ":" + minutes + " " +p;
+   io.in(data.room).emit('new message',{user:data.user,message:data.message,room:data.room,date:time}) 
+   console.log(data)
+    let message = new chat({user:data.user,room:data.room,message:data.message,time:time,name:data.name,image:data.image})
       message.save()
-    })
 })
 socket.on('friendmessage',(data)=>{
-  // console.log(data) 
-  io.in(data.sender).emit('sender friendmessage',{user:data.sender,message: data.message,})
-  socket.broadcast.to(data.reciever).emit('new friendmessage',{user:data.sender,message: data.message})
- if (data) {
-   
- }
-  // let friendmessage = new friendchat({
-  //    sender:data.sender,
-  //    reciever:data.reciever,
-  //    message:data.message
-  // })
-  // friendmessage.save()
+  socket.broadcast.to(data.reciever).emit('new friendmessage',{user:data.sender,reciever:data.reciever,message:data.message,image:data.image})
+  io.in(data.sender).emit('sender friendmessage',{user:data.sender,reciever:data.reciever, message: data.message,image:data.image})
+  let friendmessage = new friendchat({
+     sender:data.sender,
+     reciever:data.reciever,
+     message:data.message,
+     image:data.image
+  })
+  friendmessage.save()
 
 })
 
@@ -139,9 +231,11 @@ socket.on('privatechatroom',function(data){
          socket.broadcast.to(data.reciever).emit('offline',{online:"offline"})
       })
 socket.on('friendmessage on',(data)=>{
-  // {$or:[{firstname: data.first,},{firstname:data.second}]}
-    friendchat.find({$or:[{sender:data.sender,reciever:data.reciever},{sender:data.reciever,reciever:data.sender}]},(err,result)=>{
-       console.log(result)
+  const schem={
+    __v:false,
+    _id:false
+  }
+    friendchat.find({$or:[{sender:data.sender,reciever:data.reciever},{sender:data.reciever,reciever:data.sender}]},schem,(err,result)=>{
       if(err) throw err;
        socket.emit('displayfriendmessage',result)
        })
@@ -149,9 +243,9 @@ socket.on('friendmessage on',(data)=>{
       socket.on('signup',(data)=>{
         var genderFerify;
         if(data.gender=='male'){
-          genderFerify ='/assets/images/no-photo.jpg';
+          genderFerify='male.jpg';
         }else if(data.gender=="female"){
-          genderFerify ='/assets/images/Girl.jpg';
+          genderFerify ='female.jpg';
         }
     let register = new chatModel({
     firstname:data.firstname,
@@ -159,10 +253,14 @@ socket.on('friendmessage on',(data)=>{
     email:data.email,
     password:data.password,
     phone:data.phone,
-    gender:data.genger,
+    gender:data.gender,
     image:genderFerify,
   })
-  register.save();
+  register.save((err,res)=>{
+  console.log(err);
+  console.log(res);
+  socket.emit("register",{success:res,error:err});
+  });
         // socket.emit('new user sign up',{firstname:data.firstname,lastname:data.lastname,email:data.email,password:data.password,phone:data.phone,});
     //  fs.readFile('','utf8',function(err, info){
     //   console.log(info)
@@ -177,58 +275,192 @@ socket.on('friendmessage on',(data)=>{
 
   })
  socket.on('login',(data)=>{
-  chatModel.findOne({email:data.email,password:data.password,},(err,result)=>{
-    if (result){ 
-      // console.log(result)
+   chatModel.findOne({email:data.email,password:data.password,},(err,result)=>{
       socket.emit('new login',{result})
-    }
   })
   })
   socket.on('fetchdata',(data)=>{
-    chatModel.findOne({firstname:data},(err,result)=>{
+    chatModel.findOne({email:data},usersProjection,(err,result)=>{
       if (result){ 
         // console.log(result)
         socket.emit('new data',{result})
       }
     })
     })
-  socket.on('create',(data)=>{
-    let creategroup = new create({
+    var igno={
+      _v:false,
+      _id:false,
+      user:false
+    }
+    socket.on('group list',(data)=>{
+      joining.find({user:data},igno,(err,res)=>{
+        socket.emit('list of group',res.sort())
+      })
+    })
+    socket.on('other groups',(data)=>{
+      var igno={
+        _v:false,
+        _id:false,
+      }
+       let groups=[]
+       group.find({},(er,response)=>{
+       response.map(list => {
+           let gru = list.name;
+           joining.findOne({user:data,room:gru},igno,(err,res)=>{
+             if(!err && !res){
+               groups.push(list)
+              }
+              socket.emit('other group',groups.sort())
+            })
+          })
+        })
+    })
+    socket.on('create',(data)=>{
+     let creategroup = new group({
       creator:data.user,
-      groupname:data.groupname,
+      name:data.name,
       discription:data.discription
     })
-     creategroup.save();
-    // socket.broadcast.to(res).emit('create group',{message:'You invited to a group by '+ data.user})
+     creategroup.save((err,res)=>{
+       if(err){
+        socket.emit('create group',{message:'This group name is exist'})
+      }
+      else{
+        socket.emit('create group',{message:'Created'})
+      }
+
+
+     });
 
   })   
   socket.on('profileImage',(data)=>{
-    console.log(data)
-  socket.emit('new profileImage',{image:data.image})
-  var newImage = { $set: {image:data.image}};
-  chatModel.updateOne({firstname:data.username},newImage,(err,result)=>{
-    if (result){ 
-      console.log(result)
-      // socket.emit('new login',{result})
+    // console.log(data)
+    socket.emit('new profileImage',{image:data.image})
+    var newImage = { $set: {image:data.image}};
+    chatModel.updateOne({email:data.username},newImage,(err,result)=>{
+      if (result){ 
+        console.log(result)
     }
   })
   chat.updateMany({user:data.username},newImage,(err,result)=>{
     if (result){ 
       console.log(result)
-      // socket.emit('new login',{result})
     }
   })
-
-  // chatModel.update({firstname:data},newImage);
-
+})
+socket.on("post image",(data)=>{
+  socket.emit("new post image",{image:data})
+})
+socket.on("post",(data)=>{
+//  console.log(data)
+let date_ob = new Date();
+      let p="";
+      let date = ("0" + date_ob.getDate()).slice(-2);
+      // current month
+     let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+// current year
+    let year = date_ob.getFullYear();
+// current hours
+   let hours = date_ob.getHours();
+ if (hours<=9) {
+   hours="0"+hours;
+ }
+   let minutes = date_ob.getMinutes();
+   if (minutes<10) {
+     minutes = "0"+minutes; 
+   }
+// current seconds
+  //  let seconds = date_ob.getSeconds();
+   let time =year + "-" + month + "-" + date + " " + hours + ":" + minutes;
+ const posts = new post({
+   image:data.image,
+   text:data.text,
+   time:time,
+   name :data.name,
+   userimage:data.userimage,
+   email:data.email
+ })
+//  console.log(data)
+ posts.save() 
 })
 
+let pos = [];
+socket.on('fetch post',(data)=>{
+  var nofetch={
+    __v:false,
+  }
+  post.find({},nofetch,async(err,result)=>{
+    // console.log(result)
+    await  result.map(async(d)=>{
+      groupjoins.findOne({$or:[{first:data,second:d.email},{first:d.email}]},nofetch,async(err,res)=>{
+        // console.log(d._id)
+        if (res) {
+          comment.find({},nofetch,async(re,err)=>{
+            console.log(re)
+            await pos.push({post:d,comment:re})
+          })
+        }
+                // console.log(d)
+                await socket.emit('all posts',pos
+                .sort((a,b)=>{
+                  var dateA=new Date(a.post.time),dateB=new Date(b.post.time);
+                  return dateA-dateB;
+                })
+                ) 
+                  // console.log(res)
+                })
+                
+              })
+            
+              
+        // console.log(pos)
+   })
+})
+
+socket.on("comments",(data)=>{
+  //  console.log(data)
+  let date_ob = new Date();
+        // let p="";
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        // current month
+       let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  // current year
+      let year = date_ob.getFullYear();
+  // current hours
+     let hours = date_ob.getHours();
+   if (hours<=9) {
+     hours="0"+hours;
+   }
+     let minutes = date_ob.getMinutes();
+     if (minutes<10) {
+       minutes = "0"+minutes; 
+     }
+  // current seconds
+    //  let seconds = date_ob.getSeconds();
+     let time =year + "-" + month + "-" + date + " " + hours + ":" + minutes;
+   const comments = new comment({
+     post_id:data.id,
+     text:data.text,
+     time:time,
+     name :data.name,
+     userimage:data.userimage,
+     email:data.email
+   })
+  //  console.log(data)
+   comments.save((res,err)=>{
+     if (res) {
+      socket.emit("newcomment",{message:"success"})
+     }
+   }) 
+  })
+  
 })
   app.post('/file',uploads.single('file'),(req,res,next)=>{
     const file = req.file;
     res.send(file);
-    // var filed = file.path
-    // var filler =filed.slice(16);
-    // console.log(filler);
+  })
+  app.post('/files',images.single('file'),(req,res,next)=>{
+    const file = req.file;
+    res.send(file);
   })
   

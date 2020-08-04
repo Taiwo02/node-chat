@@ -1,16 +1,24 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav shadow bg-light"   fixedInViewport
+  <!-- " isHandset$ | async" -->
+  <mat-sidenav #drawer class="sidenav shadow"   fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
+    <mat-nav-list *ngIf="isHandset$ | async" (click)="drawer.toggle()">
         <a mat-list-item routerLink="/document/posts">Home</a>
       <a mat-list-item routerLink="/document/document-list">Groups</a>
       <a mat-list-item routerLink="/document/friends">Friends</a>
       <a mat-list-item routerLink="/document/users">Add friend</a>
       <a mat-list-item (click)="logout()">logout</a>
     </mat-nav-list>
+    <mat-nav-list *ngIf="(isHandset$ | async) === false">
+      <a mat-list-item routerLink="/document/posts">Home</a>
+    <a mat-list-item routerLink="/document/document-list">Groups</a>
+    <a mat-list-item routerLink="/document/friends">Friends</a>
+    <a mat-list-item routerLink="/document/users">Add friend</a>
+    <a mat-list-item (click)="logout()">logout</a>
+  </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="bordered shadow" style="padding:40px 10px">
@@ -29,9 +37,9 @@
       <!-- <p>{{notification}}</p> -->
       <p class="spacer"></p>
       <!-- <button (click)=" progress()">click</button> -->
-      <div>
-        <img routerLink="/profile" style=" border-radius: 100%; width: 40px ;height: 40px;display: block;" src="{{result.image}}" alt="">
-        <!-- <small>{{result.firstname}}</small> -->
+      <div class="row mr-2">
+        <small class="mr-2">{{name}}</small>
+        <img routerLink="/profile" style=" border-radius: 100%; width: 40px ;height: 40px;display: block;" src="{{documentService.imgurl}}{{image}}" alt="">
       </div>
     </mat-toolbar>
           <div class="container">

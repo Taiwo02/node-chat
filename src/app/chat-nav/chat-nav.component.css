@@ -25,11 +25,23 @@
 .card{
   border-radius: 10px;
   }
+  /* #dispp{
+    width: auto;
+    height:10px;
+    background-color: rgb(47, 194, 113);
+    padding: 20px;
+    max-width: 60%;
+  } */
   .card-header{
       border-top-right-radius: 10px;
       border-top-left-radius: 10px;
       background-color: rgb(47, 194, 113);
   
+  }
+  img{
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
   }
   .nam{
       width:auto;
@@ -42,11 +54,20 @@
       padding:5px;
       /* background-color:rgb(9, 119, 9) */
   }
-  .card-body{
-      border-top-left-radius:-100px;
-      border-top-right-radius: 10px;
-      border-bottom-right-radius: 10px;
-      border-bottom-left-radius: 10px;
+  #txt{
+    border: solid 1px #85ee85;
+    outline:none;
+  }
+  #txt:focus{
+    border: none;
+    border-bottom: solid 2px #08b608;
+  }
+  .conty{
+    /* height:5px; */
+    padding: 20px;
+      border-radius: 10px;
+      width: auto;
+      height: auto; 
       background-color: rgb(88, 236, 162);
   }
   .spacer{
@@ -57,10 +78,17 @@
       margin: 0;
       padding: 0 0 0 0;
       position: absolute;
-      height:90%; 
+      height:80%; 
       width: 100%;
       overflow-y:auto;
   }
   .grey{
     background-color: lightgrey;
+  }
+  @media screen and (max-width:500){
+    img{
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
+    }
   }

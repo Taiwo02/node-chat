@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" style="cursor:context-menu;">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
@@ -6,12 +6,13 @@
     <mat-toolbar class=" col-12">Groups</mat-toolbar>
     <mat-nav-list >
       <div class="container" *ngFor='let list of group' >
-        <button class="btn btn-success col-12 mb-4" (click)="friends(list.title)">{{list.title}}</button>
+        <button class="btn btn-success col-12 mb-4" (click)="friends(list.room)">{{list.room}}</button>
       </div>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary" style="text-align: center;">
+      <mat-icon class="text-light mr-3" routerLink="/document/document-list">keyboard_backspace</mat-icon>
       <p >{{room}}</p>
     </mat-toolbar>
     <!-- Add Content Here -->
@@ -19,49 +20,43 @@
         <div style="width: 100%; height:50px;"></div>
         <div class="container">
             <div class="container">
-      <div *ngFor="let list of displaymessages" class="row mb-4">
+      <div *ngFor="let list of displaymessages" class="row mb-2">
             <p [class.spacer]="list.user == user"></p>
-            <div  style="width: auto;max-width:60%;height: auto;">
-            <div class="card mb-4  shadow-sm" style="width: auto;height: auto;">
-              <!-- <div class="card-header"  style="height:auto;">
-                  {{list.user}}
-            </div> -->
-            <div class="card-body" [class.grey]="list.user != user">
-                <div class="row mb-2" >
-                   <img src="{{list.image}}" alt="" style="width: 40px;height: 40px;border-radius: 100%;">
-                  <small class="nam">{{list.user}}</small>           
-                  </div>
-               <div>{{list.message}}</div>
-            </div>
-            </div>
+            <div  style="width: auto;max-width:60%;height:auto;">
+              <div *ngIf="list.room===room">
+                <img *ngIf="list.user != user" src=" {{documentservice.imgurl}}{{list.image}}" alt="" >
+               <small *ngIf="list.user != user" class="nam">{{list.name}}</small>           
+              <!-- <div   class="" > -->
+              <div class=" conty shadow-sm" [class.grey]="list.user != user">
+                 <p >{{list.message}}</p>
+                 <small style="float: right;">{{list.time.slice(11,19)}}</small>
+              </div>
+              <!-- </div> -->
+              </div>
             </div>
          </div>
          </div>
-             <div class="container" *ngIf="room === roomcheck">
-                <div *ngFor="let item of messageArray" class="row mb-4">
-                        <p [class.spacer]="item.user == user"></p>
-                        <div  style="width: auto;max-width:60%;height: auto;">
-                        <div class="card  mb-4  shadow" style="width: auto;height: auto;padding: 0%;">
-                          <!-- <div class="card-header text-center" style="height:auto;">
-                              {{item.user}}
-                        </div> -->
-                        <div class="card-body" [class.grey]="item.user != user">
-                         <div class="row">
-                              <img src="{{item.image}}" alt="" style="width: 40px;height: 40px;border-radius: 100%;">
-                            <small class="nam">{{item.user}}</small>
-                          </div>
-                           <div>{{item.message}}</div>
-                        </div>
-                        </div>
-                        </div>
-                     </div>
-                    </div>
+        <div *ngFor="let item of messageArray" class="row mb-4 container">
+            <p [class.spacer]="item.user == user"></p>
+            <div *ngIf="item.room == room" style="width: auto;max-width:60%;height: auto;">
+              <img *ngIf="item.user != user" src=" {{documentservice.imgurl}}{{image}}" alt="" style="width: 40px;height: 40px;border-radius: 100%;">
+              <small *ngIf="item.user != user" class="nam">{{name}}</small>
+            <div  *ngIf="item.room == room" class="card  mb-2  shadow" style="width: auto;height: auto;padding: 0%;">
+            <div class="card-body" [class.grey]="item.user != user">
+              <div class="row">
+              </div>
+                <p>{{item.message}}</p>
+                <small class="float-right">{{item.date.slice(11,19)}}</small>
+            </div>
+            </div>
+            </div>
+        </div>
         </div>
          </div>
-        <div class="container">
-                <div class="row fixed-bottom">
+        <div class="container fixed-bottom mb-1">
+                <div class="row ">
                    <p class="spacer col-12 col-lg-3"></p>
-                    <input type="text" name="" (focus)="typing()" id="" class="col-8 col-lg-6 shadow"[(ngModel)]="messagetext">
+                    <input type="text" name="" (focus)="typing()" id="txt" class="col-8 col-lg-6 shadow"[(ngModel)]="messagetext">
                     <input type="button" value="Send" class="btn btn-success btn-sm col-4 col-lg-1" (click)="sendMessage()">
                 </div>
             </div>

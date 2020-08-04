@@ -11,14 +11,18 @@ import {Friends} from './groups'
   providedIn: 'root'
 })
 export class DocumentService {
+  imgurl = '/chat-app/public/upload/';
+  imgurlPost = '/chat-app/public/posts/';
+  
   public groupname;
-  user:String;
+  user:any;
   groups = Groups;
   fileString:any= "";
+  notify:any="";
   views:Array<{user:String, message:String}>=[]
   constructor(private socket: Socket,) {
-    console.log(this.views)
    }
+  
   
   joinroom(data){
     this.socket.emit('join',data);
@@ -80,7 +84,7 @@ export class DocumentService {
     })
     return observable;
   }
-newuserjoined(){
+newuserjoineded(){
   let observable = new Observable<{user:String,message:String}>(observer=>{
     this.socket.on('new user joined',(data)=>{
       observer.next(data);
@@ -106,21 +110,25 @@ userleftroom(){
 sendmessage(data){
   this.socket.emit('message',data)
 }
+userData(){
+  return this.user;
+}
 newmessagerecieved(){
-  let observable = new Observable<{user:String,message:String,image:String,room:String}>(observer=>{
+  let observable = new Observable<{user:String,message:String,room:String,date:String}>(observer=>{
     this.socket.on('new message',(data)=>{
       observer.next(data);
     })
     return ()=>{this.socket.disconnect()}
     
   })
+  console.log(observable)
   return observable;
 }
  friendmessage(data){
   this.socket.emit('friendmessage',data)
    }
 newfriendmessage(){
-  let observable = new Observable<{user:String, message:String}>(observer=>{
+  let observable = new Observable<{user:String, message:String,image:String}>(observer=>{
     this.socket.on('new friendmessage',(data)=>{
       observer.next(data);
     })
@@ -174,16 +182,19 @@ messageon(data){
   let observable = new Observable<{result}>(observer=>{this.socket.on('groupverify',(data)=>{ observer.next(data); })
   return ()=>{this.socket.disconnect()}});return observable;
 }
+groupjoining(data){
+  return this.socket.emit('joingroup',data)
+ }
 messagedisplay(){
       let observable = new Observable<{result}>(observer=>{this.socket.on('displaymessage',(data)=>{ observer.next(data); })
       return ()=>{this.socket.disconnect()}});return observable;
-  }
+      }
  register(data){
      this.socket.emit('signup',data);
     }
   newregister(){
-    let observable = new Observable<{firstname:String,img:String}>(observer=>{
-      this.socket.on('new user sign up',(data)=>{
+    let observable = new Observable<{success:String,error:String}>(observer=>{
+      this.socket.on('register',(data)=>{
         observer.next(data);
       })
       return ()=>{this.socket.disconnect()}
@@ -221,7 +232,7 @@ messagedisplay(){
     this.socket.emit('login',data)
   }
   newlogin(){
-      let observable = new Observable<{Object }>(observer=>{
+      let observable = new Observable<{result }>(observer=>{
         this.socket.on('new login',(data)=>{
           observer.next(data);
         })
@@ -230,7 +241,20 @@ messagedisplay(){
       })
       return observable;
   }
-
+   grouplist(data){
+     this.socket.emit('group list',data)
+     
+   }
+   listofgroups(){
+    let observable = new Observable<{message:String}>(observer=>{
+      this.socket.on('list of group',(data)=>{
+        observer.next(data);
+      })
+      return ()=>{this.socket.disconnect()}
+  
+    })
+    return observable;
+}
    create(data){
     this.socket.emit('create',data)
   }
@@ -244,4 +268,63 @@ messagedisplay(){
       })
       return observable;
   }
+  othergroups(data){
+    this.socket.emit('other groups',data)
+    
+  }
+  listofgroup(){
+   let observable = new Observable<{message:String}>(observer=>{
+     this.socket.on('other group',(data)=>{
+       observer.next(data);
+     })
+     return ()=>{this.socket.disconnect()}
+ 
+   })
+   return observable;
+}
+postImage(data){
+ this.socket.emit("post image",data)
+}
+newPostImage(){
+  let observable=new Observable<{image:string}>(observer=>{
+    this.socket.on("new post image",(data)=>{
+      observer.next(data);
+    })
+    return ()=>{this.socket.disconnect()}
+  })
+  return observable;
+}
+fetchpost(data){
+  this.socket.emit("fetch post",data)
+
+}
+posts(data){
+  this.socket.emit("post",data)
+
+}
+newpost(){
+  let observable = new Observable<{post:String,text:String,time:String,name:String,userimage:String}>(observer=>{
+    this.socket.on("all posts",(data)=>{
+         observer.next(data)
+    })
+    return ()=>{this.socket.disconnect()}
+  })
+  return observable
+}
+
+commented(data){
+  this.socket.emit("comments",data)
+
+}
+newcomment(){
+  let observable = new Observable<{message:String}>(observer=>{
+    this.socket.on("newcomment",(data)=>{
+         observer.next(data)
+    })
+    return ()=>{this.socket.disconnect()}
+  })
+  return observable
+}
+
+
 }

@@ -1,0 +1,66 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+  
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false">
+      <mat-toolbar class="text-light text-center card-header">Friends</mat-toolbar>
+    <mat-nav-list>
+      <div  *ngFor='let friend of friends' class="col-12 ">  
+        <div  class=" mb-2 mt-3">
+        <div class=" text-center">
+          <!-- {{friend.firstname}} -->
+        <img src=" {{documentservice.imgurl}}{{friend.image}}" class="mr-3" alt=""> <span  (click)="friedname(friend.email)">{{friend.firstname}}</span>  
+        </div>
+        </div>
+        <hr> 
+        </div> 
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <mat-icon class="mr-3 text-light" style="outline: none;" (click)="bfriends()">keyboard_backspace</mat-icon> 
+      <img src="{{documentservice.imgurl}}{{friend_name.image}}">
+      <span class="text-light">{{friend_name.firstname}}</span>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <div class="container col-lg-12 col-md-10 col-12 contain"  style="height:85%; ">
+      <div class=" col-12 chat"   #scrollMe [scrollTop]="scrollMe.scrollHeight"  style="height:98%; overflow-y: auto;padding-top: 10px;">
+          <div>
+              <div *ngFor="let item of viewer" class="row mb-4">
+                      <p [class.spacer]="item.sender == user"></p>
+                      <div class="col-auto col-lg-auto" style="max-width: 70%;">
+                      <img *ngIf="item.sender != user" src="{{documentservice.imgurl}}{{item.image}}"  alt="">
+                      <div class="card mb-4">
+                      <div class="card-body" [class.notUser]="item.user == user" [class.user]="item.user !== user">
+                        {{item.message}}
+                      </div>
+                      </div>
+                      </div>
+                   </div>
+                  </div>
+          <div *ngFor="let list of view" class="row">
+                  <p [class.spacer]="list.user == user"></p>
+                  <div class="col-auto col-lg-auto" style="max-width: 70%;">
+                    <img *ngIf="list.user != user" src="{{documentservice.imgurl}}{{list.image}}"  alt="">
+                  <div class="card mb-3" *ngIf="list.reciever==name">
+                  <div  class="card-body" [class.notUser]="list.user !== user" [class.user]="list.user == user">
+                    {{list.message}}
+                    {{list.firstname}}
+
+                    
+                  </div>
+                  </div>
+                  </div>
+               </div>
+      </div>
+           <div class="container">
+                   <div class="row">
+                      <p class="spacer col-12 col-lg-3"></p>
+                       <input type="text" name="" id="" class="col-8 col-lg-6 shadow-sm" style="border: solid 1px #58ECA2; outline: none;" [(ngModel)]="message">
+                       <input type="button" value="Send" class="btn btn-success btn-sm col-4 col-lg-2" (click)="send()">
+                   </div>
+               </div>
+  </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,10 +1,11 @@
 <div class="container mt-4">
        <div class="container">
            <p class="text-center">Create group</p>
+           <p class="text-center" *ngIf="notification">{{notification.message}}</p>
       Name: <input class="shadow" type="text" [(ngModel)]="groupname" style="border: none; border-radius: 10px;"><br><br>
        Discription: <textarea [(ngModel)]="discription" class="shadow" style="border: none;border-radius: 10px"></textarea>
        </div>         
          <div class="container fixed-bottom">
-                <button class="btn  btn-success float-right" (click)="create()">create</button>
+                <button class="btn  btn-success float-right" (click)="creat()">create</button>
                 </div>
             </div>

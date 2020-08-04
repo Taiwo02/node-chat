@@ -17,7 +17,6 @@ import{FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { FriendsComponent } from './friends/friends.component';
-import { ChatComponent } from './chat/chat.component';
 import { UsersComponent } from './users/users.component';
 import { CreateGroupComponent } from './create-group/create-group.component';
 import { ImageComponent } from './image/image.component';
@@ -25,7 +24,10 @@ import {HttpClientModule} from '@angular/common/http'
 import { from } from 'rxjs';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { ChatNavComponent } from './chat-nav/chat-nav.component';
-const config : SocketIoConfig={ url:'http://192.168.43.204:1992',options:{}};
+import { PnavComponent } from './pnav/pnav.component';
+import { PostsComponent } from './posts/posts.component';
+import { ShowComponent } from './show/show.component';
+const config : SocketIoConfig={ url:'http://localhost:1992',options:{}};
 
 
 
@@ -38,12 +40,14 @@ const config : SocketIoConfig={ url:'http://192.168.43.204:1992',options:{}};
     RegisterComponent,
     LoginComponent,
     FriendsComponent,
-    ChatComponent,
     UsersComponent,
     CreateGroupComponent,
     ImageComponent,
     SidenavComponent,
-    ChatNavComponent
+    ChatNavComponent,
+    PnavComponent,
+    PostsComponent,
+    ShowComponent,
   ],
   imports: [
     BrowserModule,

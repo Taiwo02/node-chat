@@ -1,17 +1,33 @@
-          <div  class=" container row"> 
-              <!-- <div > -->
-                    <div  *ngFor='let list of groups' class="col-12 col-lg-4 col-md-2">  
-                    <div  class=" mb-5 mt-3">
-                    <div class="card-header shadow">
-                     <button class="btn text-success" (click)="sendgroup(list.title)">
-                     <strong >{{list.title}}</strong> 
-                    </button> 
-                    </div>
-                    </div> 
-                    </div> 
-                    <div> 
-                    </div>
-                    <div class="container  fixed-bottom">
-                      <button routerLink="/document/group" class="btn btn-success float-right">Create group</button>
-                    </div>
-                   </div>                                    
+  <p *ngIf="joinedgroups" class="row justify-content-center mt-4">Groups</p>
+    <div  class=" container row mt-2 mb-5"> 
+      <div  *ngFor='let group of joinedgroups' class="col-12 col-lg-4 col-md-2" >  
+        <div  class=" mb-3">
+        <div (click)="sendgroup(group.room)" >
+          <div class=" col-auto" >
+          <span>{{group.room}}</span>
+         </div>
+        </div> 
+        </div>
+        <hr class="col-auto">
+        </div>
+        <div class="mb-3 container">
+          <hr class="col-12">
+          <p class="row justify-content-center">Join more groups</p>
+        </div>
+    <div  *ngFor='let list of groups' class="col-12 col-lg-4 col-md-2 " >  
+    <div  class=" mb-3">
+    <div class="card-header shadow-sm" >
+      <div class="text-success col-12" >
+      <strong>{{list.name}}</strong><br>
+      <small>discription: {{list.discription}}</small>
+      <input type="checkbox" (click)="join(list.name)" class="float-right" style="width: 20px;height:20px;">
+     </div>
+    </div> 
+    </div>
+    </div>
+    </div> 
+    <div class="container fixed-bottom">
+      <button *ngIf="added==''" routerLink="/document/group" class="btn text-light btn-success float-right">Create group</button>
+      <button *ngIf="added!=''" class="btn btn-success float-right" (click)="add()">Add</button>
+
+    </div>    

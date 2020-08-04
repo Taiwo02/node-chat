@@ -21,26 +21,34 @@ export class LoginComponent implements OnInit {
   
 
 
-  constructor(private router:Router,private documentservice:DocumentService,private fb:FormBuilder) { 
+  constructor(
+    private router:Router,
+    private documentservice:DocumentService,
+    private fb:FormBuilder
+    ) { 
+      
     this.documentservice.newlogin().subscribe(data => {
-      if (data.Object!="") {
-        // window.localStorage.test = JSON.stringify({data:{result:{firstname:}}});
-     window.localStorage.test = JSON.stringify({data});
-    //  console.log(data.Object.result.firstname)
-    //  window.localStorage.test = JSON.stringify({data:{result:{firstname:result,}}});
-        this.router.navigate(["/document/posts"])
-      } else if (data.Object===""){
-        console.log(data)
-        this.router.navigate(["/login"])
-       this.submitted=false
-       console.log(this.response)
+      this.submitted=true;
+      if (data.result!=null) {
+        setTimeout(()=>{
+          this.submitted=false;
+          window.localStorage.test = JSON.stringify({data:{result:{firstname:data.result.email}}});
+          this.router.navigate(["/document/posts"])
+        },5000)
+      } else if (data.result===null){
+        setTimeout(()=>{
+          this.submitted=false
+          this.showAlert=false;
+           this.show=false;
+          this.router.navigate(["/login"])
+         },5000)
       }
     })
   }
 
   ngOnInit() {
   this.user=(JSON.parse(localStorage.test).firstname);
-  if (this.user !="") {
+  if (this.user !=undefined) {
     this.router.navigate(["/document/posts"])   
   }
   }
@@ -52,14 +60,7 @@ export class LoginComponent implements OnInit {
     get password(){ return this.regform.get("password");}
 
     submite():void{
-      this.submitted=true;
-      console.log(this.emai)
-      console.log(this.passwor)
-      setTimeout(()=>{
-        this.submitted=false;
-        this.showAlert=false;
-        this.show=false;
         this.documentservice.login({email:this.emai,password:this.passwor})
-      },5000)
+     
     }
 }

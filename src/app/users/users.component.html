@@ -3,15 +3,16 @@
       <small class="text-dark">{{messageArray.user}}</small>
       <small class="text-dark">{{messageArray.message}}</small>
   </div> -->
-              <div  *ngFor='let fried of friendsArray' class="col-12 col-lg-4 col-md-2">  
-              <div  class=" mb-5 mt-3" >
-              <div class="card-header shadow"  [class.no]="fried.firstname == first">
-               <button  class="btn text-success"  >
-               <strong >{{fried.name}}</strong>  
-               </button>
-                 <input type="button"  (click)="user(fried.firstname)"  value="add" class=" btn btn-success" style="float:right; outline: none;">
-                 <!-- <input class="float-right" type="button" name="" id="" value="Leave" class="ml-1 btn btn-danger" (click)="leave()">  -->
-              </div>
-              </div> 
-              </div> 
-             </div>   
+  <div  *ngFor='let friend of friendsArray' class="col-12 col-lg-4 col-md-2">  
+  <div  class=" mb-5 mt-3" >
+  <div class="card-header shadow"  >
+    <div  class="btn text-success row" style="outline: none;">
+      <img src="  {{documentservice.imgurl}}{{friend.image}}" style="width:50px; height: 50px; border-radius: 100%;" class=" mr-3" >
+    <strong >{{friend.firstname}} {{friend.lastname}}</strong>  
+    <input type="button"  (click)="user(friend.email)"  value="add" class="ml-3 btn btn-success" style="float:right; outline: none;">
+    </div>
+      <!-- <input class="float-right" type="button" name="" id="" value="Leave" class="ml-1 btn btn-danger" (click)="leave()">  -->
+  </div>
+  </div> 
+  </div> 
+  </div>   

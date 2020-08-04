@@ -1,5 +1,6 @@
 import { Component, OnInit,} from '@angular/core';
 import {DocumentService} from '../../document.service'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-friends',
@@ -9,17 +10,21 @@ import {DocumentService} from '../../document.service'
 export class FriendsComponent implements OnInit {
   user;
  friends;
-  constructor(private documentservice:DocumentService) {
-    this.documentservice.friends().subscribe(data => {console.log(data); this.friends=data})
+  constructor(private documentservice:DocumentService,private router:Router) {
+    this.documentservice.friends().subscribe(data => {
+      this.friends=data
+    })
   }
  
   ngOnInit() {
-  this.user = this.documentservice.user;
+    this.user= JSON.parse(localStorage.test).data.result.firstname;
   this.documentservice.friend({user:this.user})
   }
   friedname(friend){
-    // this.documentservice.privatechat({sender:this.user,reciever:friend})
+    // alert(friend)
+    this.documentservice.privatechat({sender:this.user,reciever:friend})
     localStorage.friend = JSON.stringify({name:friend});
-  }
+    this.router.navigate(['/chat'])
+    }
 
 }

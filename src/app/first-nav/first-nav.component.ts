@@ -22,20 +22,26 @@ export class FirstNavComponent implements OnInit{
     );
     details;
     notification
-
-  constructor(private breakpointObserver: BreakpointObserver,private documentService: DocumentService,private router:Router) {
-    // setInterval((()=>{this.progress(); }),500);
-    this.documentService.newdata().subscribe(data => {
-      console.log(data)
-      this.result=data.result;
+    name=null;
+    image=null
+    constructor(private breakpointObserver: BreakpointObserver,private documentService: DocumentService,private router:Router) {
+      // setInterval((()=>{this.progress(); }),500);
+      this.documentService.newdata().subscribe(data => {
+        this.name=data.result.firstname
+        this.image=data.result.image
+        console.log(data)
+        
     })
+    this.documentService.newfriendmessage().subscribe(
+      // (data)=>console.log(data)
+    )
   }
   ngOnInit() {
     this.username=(JSON.parse(localStorage.test).data.result.firstname);
-    this.documentService.fetchdata(this.username);
   }
   logout(){
-    (delete(localStorage.test));
+    // (delete(localStorage.test));
+    window.localStorage.test = JSON.stringify({data:{result:{firstname:""}}});
     this.router.navigate(["/login"])
   };
   progress(){

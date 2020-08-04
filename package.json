@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "nodemon chat.js",
+    "serve": "node chat.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --oat --target=production"
+    "postinstall": "ng build --aot --target=production"
   },
   "private": true,
   "dependencies": {

@@ -2,26 +2,31 @@
 <p class="center">Sign up</p>
 </nav>
 <div class="container">
+  <div id="contain" class="float-right">
+    <span class=" fa fa-spin" *ngIf="submitted" style="margin-left:10px;font-size:20px;"><i class="fa fa-spinner"></i></span>
+</div>
   <div class="container row"> 
     <div class="col-md-3"></div>  
-  <form action="/registerfile" method="POST" [formGroup]="regform"  novalidate (ngSubmit)="submite()" class="col-12 col-lg-6 shadow mt-3">
-    <p class="text-center">
-      <strong>signup!</strong>
-    </p>
+    <form action="/registerfile" method="POST" [formGroup]="regform"  novalidate (ngSubmit)="submite()" class="col-12 col-lg-6 shadow mt-3">
+      <p class="text-center">
+        <strong>signup!</strong>
+      </p>
+      <p *ngIf="register_verification" class="alert alert-danger">{{register_verification}}</p>
     <div class="container">
       <h5> FirstName:</h5><input class="shadow mb-2" type="text" [class.incorrect]="firstName.touched && firstName.invalid" formControlName="firstName"><br>
       <h5>LastName:</h5><input class="shadow mb-2" type="text"  [class.incorrect]="lastName.touched && lastName.invalid" formControlName="lastName"><br>
       <h5> Email:</h5><input class="shadow mb-2" type="email"  [class.incorrect]="email.touched && email.invalid" formControlName="email"><br>
       <h5>Password:</h5> <input class="shadow mb-2" type="password"  [class.incorrect]="password.touched && password.invalid" formControlName="password">
       <h5>Phone:</h5><input class="shadow mb-2" type="number"  [class.incorrect]="phone.touched && phone.invalid" formControlName="phone"><br>     
-      Gender:<select style="width: auto;" name="gender" id="" [class.incorrect]="gender.touched && gender.invalid" formControlName="gender">
+      Gender:<select style="width: auto;" name="gender" class="mb-3" [class.incorrect]="gender.touched && gender.invalid" formControlName="gender">
          <option value="male">male</option>
          <option value="female">female</option>
        </select>
-      <button type="submit" class="btn btn-success" [disabled]="regform.invalid ||submitted">
-        Submit
-      </button>
-    </div>
+       <button type="submit" class="btn btn-success float-right mb-3 text-light" [disabled]="regform.invalid ||submitted">
+         Submit
+        </button>
+      </div>
+      <button type="submit" class="btn btn-success mb-3 text-light" routerLink="/login">Sign in</button>
   </form>
   </div>
 </div>      

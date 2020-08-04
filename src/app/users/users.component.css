@@ -10,6 +10,7 @@
         flex: 1 0 auto;
     }
     .card-header{
+        width: auto;
         height: auto;
         border-radius: 10px;
         color: rgb(140, 233, 140);
