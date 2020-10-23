@@ -9,7 +9,10 @@ var imgPath = './public/upload/noimage.jpg';
 const multer = require('multer');
 const upload = multer({dest:'uploads/'})
 const path = require('path').join(__dirname +'/public');
-const cors = require('cors')
+const cors = require('cors');
+const { resolve } = require('url');
+const { async } = require('rxjs/internal/scheduler/async');
+const obId = mongoose.Schema.Types.ObjectId;
 var usersProjection = { 
   __v: false,
   _id: false,
@@ -20,11 +23,15 @@ var female;
 app.use(cors({origin:"*"}));
 app.use(bodypasser.json())
 app.use(express.static(path))
-app.use(express.static(__dirname+'/dist'))
+app.use(express.static(__dirname+'/dist/socket-app'))
 const server = app.listen(process.env.PORT || 1992,(res,err)=>{
   if(err){console.log(err)}
   console.log('started');
   
+});
+app.get("/*", function(req, res) {
+  res.sendFile("index.html", {root: "dist/socket-app/"}
+);
 });
     // app.get('/',(req,res)=>{
     //   res.send('home page')
@@ -48,8 +55,12 @@ const store = multer.diskStorage({
      }
   })
   var images = multer({storage:store});
+  // var mon = mongoose.connect('https://cloud.mongodb.com/v2/5f91a6b017919f3a34965643#metrics/replicaSet/5f91a8eaa16a4f74af348e77/explorer/chats', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
+
+// var mon = mongoose.connect('mongodb+srv://Taiwo:08102637956@local.2trri.mongodb.net/chats?retryWrites=true&w=majority', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
 mongoose.connect('mongodb://localhost/local', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
-  let user_schema= mongoose.Schema({
+
+let user_schema= mongoose.Schema({
     firstname:{type:String,require:true,unique:false,},
     lastname:{type:String,require:true,unique:false,}, 
     email:{type:String,require:true,unique:true,}, 
@@ -67,6 +78,7 @@ mongoose.connect('mongodb://localhost/local', { useNewUrlParser: true,useUnified
      time:{type:String,require:true},
      name:{type:String,require:true}
     })
+    
    const chat = mongoose.model('chats',chat_schema)
    let joining_schema= mongoose.Schema({user:String, room:String})
    const joining = mongoose.model('joins',joining_schema)
@@ -92,13 +104,21 @@ io.on("connection", (socket) => {
     io.emit("left",{message:"disconnected"})
     console.log('discconected')
   })
-  socket.on("users",(data)=>{
-    chatModel.find({},usersProjection,(err,users)=>{
-    socket.emit("all users",users)
- })
-    // groupjoins.find({first:data.first},(err,response)=>{
-    //   socket.emit("all friends",response)
-    // })
+  socket.on("users",async(data)=>{
+        let user = []
+        chatModel.find({email:{$ne:data.first}} ,usersProjection,async(err,users)=>{
+          for (let index = 0; index < users.length; index++) {
+            // console.log(users[index].email)
+            groupjoins.find({$or:[{first:data.first,second:users[index].email},{second:data.first,first:users[index].email}]},async(err,response)=>{
+              if (response=="") {
+                user.push(users[index])
+              }
+              await  socket.emit("all users",user)
+              // await console.log(user)
+            })
+            
+          }
+     })
   })
  
   socket.on("friend",(data)=>{
@@ -123,28 +143,15 @@ io.on("connection", (socket) => {
       image:false,
       lastname:false
     };
-    groupjoins.findOne({first:data.first,second:data.second},(err,response)=>{
-      if (!err && response) {
-        chatModel.findOne({email:data.second},usersdeduct,(err,res)=>{
-            console.log(res.firstname)
-            socket.emit('added friend',{user:res.firstname, message:"is your friend already"})
-          })
-        }
-        else if(!err && !response){
-          const friend =  new  groupjoins({
-           first:data.first,
-           second:data.second
-           })
-           friend.save();
-        chatModel.findOne({email:data.second},usersdeduct,(err,res)=>{
+    const friend =  new  groupjoins({
+      first:data.first,
+      second:data.second
+      })
+      friend.save();
+   chatModel.findOne({email:data.second},usersdeduct,(err,res)=>{
 
-           socket.emit('added',{user:res.firstname, message:"has successfully add to your friend"})  
-          })
-
-        }
+      socket.emit('added',{user:res.firstname, message:"has successfully add to your friend"})  
      })
-
-   
     // chatModel.find({$or:[{firstname: data.first,},{firstname:data.second}]},(err,user)=>{console.log(user) })
 
 })
@@ -339,12 +346,10 @@ socket.on('friendmessage on',(data)=>{
     var newImage = { $set: {image:data.image}};
     chatModel.updateOne({email:data.username},newImage,(err,result)=>{
       if (result){ 
-        console.log(result)
     }
   })
   chat.updateMany({user:data.username},newImage,(err,result)=>{
     if (result){ 
-      console.log(result)
     }
   })
 })
@@ -384,37 +389,41 @@ let date_ob = new Date();
  posts.save() 
 })
 
-let pos = [];
-socket.on('fetch post',(data)=>{
+socket.on('fetch post', async(data)=>{
   var nofetch={
     __v:false,
   }
-  post.find({},nofetch,async(err,result)=>{
-    // console.log(result)
-    await  result.map(async(d)=>{
-      groupjoins.findOne({$or:[{first:data,second:d.email},{first:d.email}]},nofetch,async(err,res)=>{
-        // console.log(d._id)
-        if (res) {
-          comment.find({},nofetch,async(re,err)=>{
-            console.log(re)
-            await pos.push({post:d,comment:re})
-          })
-        }
-                // console.log(d)
-                await socket.emit('all posts',pos
-                .sort((a,b)=>{
-                  var dateA=new Date(a.post.time),dateB=new Date(b.post.time);
-                  return dateA-dateB;
-                })
-                ) 
-                  // console.log(res)
-                })
-                
-              })
-            
-              
-        // console.log(pos)
-   })
+  let pos = [];
+  try {
+    const waiter = await new Promise(async(resolve, reject)=>{
+    await post.find({},nofetch,async(err,result)=>{
+      // console.log(result)
+      await  result.map((d)=>{
+        groupjoins.findOne({$or:[{second:d.email},{first:d.email}]},nofetch,(err,res)=>{
+          if(err) reject(500);
+          if (res || data == d.email) {
+            console.log(data)
+            comment.find({post_id:d._id},nofetch,async(err,re)=>{
+              if(err) reject(600);
+              // console.log(re)
+              pos.push({post:d,comment:re});
+              resolve(pos);
+                await socket.emit('all posts', pos)
+             
+            })
+          }
+          
+        })
+        
+      })        
+      })
+    })
+ 
+} catch (err) {
+  if(err === 600) socket.emit('all posts', 600);
+  if(err === 500) socket.emit('all posts', 500)
+}
+
 })
 
 socket.on("comments",(data)=>{
@@ -438,6 +447,7 @@ socket.on("comments",(data)=>{
   // current seconds
     //  let seconds = date_ob.getSeconds();
      let time =year + "-" + month + "-" + date + " " + hours + ":" + minutes;
+     console.log(data)
    const comments = new comment({
      post_id:data.id,
      text:data.text,

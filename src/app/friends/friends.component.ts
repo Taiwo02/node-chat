@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class FriendsComponent implements OnInit {
   user;
  friends;
-  constructor(private documentservice:DocumentService,private router:Router) {
+  constructor(public documentservice:DocumentService,private router:Router) {
     this.documentservice.friends().subscribe(data => {
       this.friends=data
     })

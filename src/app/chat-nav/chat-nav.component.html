@@ -24,7 +24,7 @@
             <p [class.spacer]="list.user == user"></p>
             <div  style="width: auto;max-width:60%;height:auto;">
               <div *ngIf="list.room===room">
-                <img *ngIf="list.user != user" src=" {{documentservice.imgurl}}{{list.image}}" alt="" >
+                <img *ngIf="list.user != user" src="{{documentservice.imgurl}}{{list.image}}" alt="" >
                <small *ngIf="list.user != user" class="nam">{{list.name}}</small>           
               <!-- <div   class="" > -->
               <div class=" conty shadow-sm" [class.grey]="list.user != user">
@@ -39,8 +39,8 @@
         <div *ngFor="let item of messageArray" class="row mb-4 container">
             <p [class.spacer]="item.user == user"></p>
             <div *ngIf="item.room == room" style="width: auto;max-width:60%;height: auto;">
-              <img *ngIf="item.user != user" src=" {{documentservice.imgurl}}{{image}}" alt="" style="width: 40px;height: 40px;border-radius: 100%;">
-              <small *ngIf="item.user != user" class="nam">{{name}}</small>
+              <img *ngIf="item.user != user" src="{{documentservice.imgurl}}{{image}}" alt="" style="width: 40px;height: 40px;border-radius: 100%;">
+              <small *ngIf="item.user != user" class="nam">{{naming}}</small>
             <div  *ngIf="item.room == room" class="card  mb-2  shadow" style="width: auto;height: auto;padding: 0%;">
             <div class="card-body" [class.grey]="item.user != user">
               <div class="row">

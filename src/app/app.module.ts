@@ -27,6 +27,7 @@ import { ChatNavComponent } from './chat-nav/chat-nav.component';
 import { PnavComponent } from './pnav/pnav.component';
 import { PostsComponent } from './posts/posts.component';
 import { ShowComponent } from './show/show.component';
+// const config : SocketIoConfig={ url:'https://angularchtat.herokuapp.com',options:{}};
 const config : SocketIoConfig={ url:'http://localhost:1992',options:{}};
 
 

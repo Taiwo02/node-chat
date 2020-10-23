@@ -30,7 +30,7 @@ datareciever
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private documentservice:DocumentService,private router:Router) {
+  constructor(private breakpointObserver: BreakpointObserver, public documentservice:DocumentService,private router:Router) {
     this.documentservice.newdata().subscribe(data => {
       this.friend_name=data.result;
       this.image=data.result.image
@@ -47,10 +47,10 @@ datareciever
         console.log(data);
       }
     })
-    this.documentservice.senderfriendmessage().subscribe(data =>{
-      this.view.push  (data);
-      console.log(data)
-    })
+    // this.documentservice.senderfriendmessage().subscribe(data =>{
+    //   this.view.push  (data);
+    //   console.log(data)
+    // })
     this.documentservice.online().subscribe(data => { this.datauser = data.online;})
     this.documentservice.senderonline().subscribe(data => { this.datareciever =data.online; }) 
     this.documentservice.offline().subscribe(data => { this.datauser = data.offline;})

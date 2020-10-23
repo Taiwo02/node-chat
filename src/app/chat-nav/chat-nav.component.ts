@@ -32,7 +32,7 @@ export class ChatNavComponent  implements OnInit,OnDestroy {
       shareReplay()
     );
 
-  constructor( private router:Router, private breakpointObserver: BreakpointObserver,private documentservice:DocumentService) {
+  constructor( private router:Router, private breakpointObserver: BreakpointObserver,public documentservice:DocumentService) {
     
     this.documentservice.listofgroups().subscribe(data=>{
       this.group=data

@@ -11,8 +11,8 @@ import {Friends} from './groups'
   providedIn: 'root'
 })
 export class DocumentService {
-  imgurl = '/chat-app/public/upload/';
-  imgurlPost = '/chat-app/public/posts/';
+  imgurl = 'http://localhost/chat-app/public/upload/';
+  imgurlPost = 'http://localhost/chat-app/public/posts/';
   
   public groupname;
   user:any;
@@ -63,16 +63,6 @@ export class DocumentService {
   }
   add(data){
     this.socket.emit("add",data)
-  }
-  addedfriend(){
-    let observable = new Observable<{user:String,message:String}>(observer=>{
-      this.socket.on('added friend',(data)=>{
-        observer.next(data);
-      })
-      return ()=>{this.socket.disconnect()}
-  
-    })
-    return observable;
   }
    added(){
     let observable = new Observable<{user:String,message:String}>(observer=>{

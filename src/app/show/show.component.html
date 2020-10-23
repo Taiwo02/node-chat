@@ -12,50 +12,50 @@
         <img src="{{documentservice.imgurl}}{{post.post.userimage}}" alt="" style="width: 40px;height: 40px;border-radius: 100%;">
         <span class="ml-4">{{post.post.name}}</span>
       </div>
-      <div *ngIf="post.text" class="card-body">
+      <div *ngIf="post" class="card-body">
         <h4 >{{post.post.text}}</h4>
-        <!-- <div *ngIf="post.image==null" class="row justify-content-end">
-          <h6 style="float: right;">{{post.time.slice(10,13)%12}}{{post.time.slice(13,16)}} <small *ngIf="post.time.slice(10,13)<=11">am</small> <small *ngIf="post.time.slice(10,13)>=12">pm</small></h6>
-        </div> -->
       </div>
       <div *ngIf="post.post.image" class="card-footer">
-        <img  src="{{documentservice. imgurlPost}}{{post.post.image}}" style="height:auto; width:100%;" alt="">
+        <img  src="{{documentservice.imgurlPost}}{{post.post.image}}" style="height:auto; width:100%;" alt="">
       </div>
       <div class="row justify-content-center justify-content-around">
         <mat-icon class="text-success">thumb_up</mat-icon>
-        <mat-icon  class="text-success" data-toggle="modal" data-target="#demo" (click)="mode(post.post)">comment</mat-icon>
+        <span>
+        <mat-icon  class="text-success"  data-toggle="modal" data-target="#demo" (click)="mode(post)">comment</mat-icon>
+        <span *ngIf="post.comment.length>0" class="badge badge-primary">{{post.comment.length}}</span>
+        </span>
+        
         <span>reply</span>
         <h6 style="float: right;">{{post.post.time.slice(10,13)%12}}{{post.post.time.slice(13,16)}} <small *ngIf="post.post.time.slice(10,13)<=11">am</small> <small *ngIf="post.post.time.slice(10,13)>=12">pm</small></h6>
       </div>
 
-      <div class="modal fade" id="demo" data-backdrop="false">
+      <div class="modal fade" id="demo" data-backdrop="false" *ngIf="comment">
         <div class="modal-dialog">
           <div class="modal-content">
-          
-            <!-- Modal Header -->
-            <div class="modal-header">
-             <img src="{{documentservice.imgurl}}{{comment.userimage}}" alt="" style="width: 30px;height: 30px; border-radius: 100%;">
-             <span>{{comment.name}}</span>
+            <div *ngIf="comment" class="modal-header">
+             <img src="{{documentservice.imgurl}}{{comment.post.userimage}}" alt="" style="width: 30px;height: 30px; border-radius: 100%;">
+             <span>{{comment.post.name}}</span>
               <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
-            <!-- Modal body -->
-            <div class="modal-body">
-             <div class="row justify-content-center">
-              <h4 *ngIf="comment.text">{{comment.text}}</h4>
+            <div class="modal-body ">
+             <div class="row container">
+              <h4 *ngIf="comment.post.text">{{comment.post.text}}</h4>
               <hr>
-              <img *ngIf="comment.image" src="{{documentservice. imgurlPost}}{{comment.image}}" alt="" style="width: 100%;heigh:250px;">
+              <img *ngIf="comment.post.image" src="{{documentservice. imgurlPost}}{{comment.post.image}}" alt="" style="width:80%;height:200px;">
              </div>
             </div>
             <div class="modal-body">
-              <div  class="row justify-content-center" style="height:200px;overflow: auto;">
-                jadkf<br>   jadkf<br>   jadkf<br>   jadkf<br>   jadkf<br>   jadkf<br>   jadkf<br>   jadkf<br>   jadkf<br>   jadkf<br>   jadkf<br>
+              <div  class="container" style="height:200px;overflow: auto;" >
+                <div *ngFor="let comm of comment.comment"><img src="{{documentservice.imgurl}}{{comm.userimage}}" alt="" style="width: 30px;height: 30px; border-radius: 100%;">
+                   <span class="ml-3">{{comm.text}}</span>
+                </div>
+                <hr>
               </div>
                 <div class="row justify-content-center">
-                  <input [(ngModel)]="text" type="text" class="col-8" style="border: solid grey 1px;"><input type="button" value="send" (click)="commenting(comment._id)" data-dismiss="modal" class="btn btn-success">
+                  <input [(ngModel)]="text" type="text" class="col-8" style="border: solid grey 1px;"><input type="button" value="send" (click)="commenting(comment.post._id)" data-dismiss="modal" class="btn btn-success">
                   </div>
             </div>
             
-            <!-- Modal footer -->
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>

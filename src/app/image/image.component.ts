@@ -16,7 +16,7 @@ export class ImageComponent implements OnInit {
  detail;
  image="";
  username
-  constructor( private documentservice:DocumentService, private http:HttpClient) {
+  constructor( public documentservice:DocumentService, private http:HttpClient) {
     this.documentservice.newdata().subscribe(data =>{
       // console.log(data.result.image)
       this.detail =  data.result;
@@ -57,19 +57,19 @@ export class ImageComponent implements OnInit {
 
       )
   }
-  // test(a){
-  //   if(a!=""){
-  //      this.img = a.target.files[0];
-  //   } 
-  // }
-  //   onSubmit(){
-  //       console.log(this.img)
-  //       const formData = new FormData();
-  //       formData.append('file',this.img)
-  //        this.http.post<any>('http://localhost:1994/file',formData).subscribe(
-  //          (req)=> console.log(req),
-  //          (error)=>console.log(error)
-  //        )
+  test(a){
+    if(a!=""){
+       this.img = a.target.files[0];
+    } 
+  }
+    onSubmit(){
+        console.log(this.img)
+        const formData = new FormData();
+        formData.append('file',this.img)
+         this.http.post<any>('http://localhost:1994/file',formData).subscribe(
+           (req)=> console.log(req),
+           (error)=>console.log(error)
+         )
  
-  // }
+  }
 }

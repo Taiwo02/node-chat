@@ -5,12 +5,11 @@
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
       <mat-toolbar class="text-light text-center card-header">Friends</mat-toolbar>
-    <mat-nav-list>
+    <mat-nav-list *ngIf="friends">
       <div  *ngFor='let friend of friends' class="col-12 ">  
         <div  class=" mb-2 mt-3">
-        <div class=" text-center">
-          <!-- {{friend.firstname}} -->
-        <img src=" {{documentservice.imgurl}}{{friend.image}}" class="mr-3" alt=""> <span  (click)="friedname(friend.email)">{{friend.firstname}}</span>  
+        <div class=" text-center" (click)="friedname(friend.email)">
+        <img src="{{documentservice.imgurl}}{{friend.image}}" class="mr-3" alt=""> <span  >{{friend.firstname}}</span>  
         </div>
         </div>
         <hr> 
@@ -18,14 +17,14 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar>
+    <mat-toolbar *ngIf="friend_name">
       <mat-icon class="mr-3 text-light" style="outline: none;" (click)="bfriends()">keyboard_backspace</mat-icon> 
       <img src="{{documentservice.imgurl}}{{friend_name.image}}">
       <span class="text-light">{{friend_name.firstname}}</span>
     </mat-toolbar>
     <!-- Add Content Here -->
     <div class="container col-lg-12 col-md-10 col-12 contain"  style="height:85%; ">
-      <div class=" col-12 chat"   #scrollMe [scrollTop]="scrollMe.scrollHeight"  style="height:98%; overflow-y: auto;padding-top: 10px;">
+      <div class=" col-12 chat" #scrollMe [scrollTop]="scrollMe.scrollHeight"  style="height:98%; overflow-y: auto;padding-top: 10px;">
           <div>
               <div *ngFor="let item of viewer" class="row mb-4">
                       <p [class.spacer]="item.sender == user"></p>
