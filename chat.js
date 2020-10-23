@@ -55,10 +55,9 @@ const store = multer.diskStorage({
      }
   })
   var images = multer({storage:store});
-  // var mon = mongoose.connect('https://cloud.mongodb.com/v2/5f91a6b017919f3a34965643#metrics/replicaSet/5f91a8eaa16a4f74af348e77/explorer/chats', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
 
-// var mon = mongoose.connect('mongodb+srv://Taiwo:08102637956@local.2trri.mongodb.net/chats?retryWrites=true&w=majority', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
-mongoose.connect('mongodb://localhost/local', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
+mongoose.connect('mongodb+srv://Taiwo:08102637956@local.2trri.mongodb.net/chats?retryWrites=true&w=majority', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
+// mongoose.connect('mongodb://localhost/local', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
 
 let user_schema= mongoose.Schema({
     firstname:{type:String,require:true,unique:false,},
