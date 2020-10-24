@@ -27,7 +27,7 @@
     </div>
     </div> 
     <div class="container fixed-bottom">
-      <button *ngIf="added==''" routerLink="/document/group" class="btn text-light btn-success float-right">Create group</button>
-      <button *ngIf="added!=''" class="btn btn-success float-right" (click)="add()">Add</button>
+      <button *ngIf="added==[]" routerLink="/document/group" class="btn text-light btn-success float-right">Create group</button>
+      <button *ngIf="added!=[]" class="btn btn-success float-right" (click)="add()">Add</button>
 
     </div>    
