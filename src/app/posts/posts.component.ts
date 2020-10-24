@@ -51,7 +51,7 @@ email;
     formData.append('file',this.username)
     // console.log(formData)
       // console.log(formData)
-    this.http.post<any>('http://localhost:1992/files',formData).subscribe(
+    this.http.post<any>('https://talkerses.herokuapp.com/files',formData).subscribe(
       (req)=> {
        this.image=req.path.slice(38);
        this.service.postImage(this.image)

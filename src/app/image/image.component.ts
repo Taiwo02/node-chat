@@ -45,7 +45,7 @@ export class ImageComponent implements OnInit {
     formData.append('file',this.username)
     // console.log(formData)
       // console.log(formData)
-    this.http.post<any>('http://localhost:1992/file',formData).subscribe(
+    this.http.post<any>('https://talkerses.herokuapp.com/file',formData).subscribe(
       (req)=> {
         // console.log(req)
       //  console.log(req.path.slice(40));
@@ -66,7 +66,7 @@ export class ImageComponent implements OnInit {
         console.log(this.img)
         const formData = new FormData();
         formData.append('file',this.img)
-         this.http.post<any>('http://localhost:1994/file',formData).subscribe(
+         this.http.post<any>('https://talkerses.herokuapp.com/file',formData).subscribe(
            (req)=> console.log(req),
            (error)=>console.log(error)
          )
