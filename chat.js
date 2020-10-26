@@ -41,7 +41,7 @@ const storage = multer.diskStorage({
     callback(null,__dirname+"/public/upload")
     },
     filename:(req,file,callback)=>{
-     callback(null, Date.now()+file.originalname)
+     callback(null,'ola'+file.originalname)
      }
   })
   var uploads =multer({storage:storage});
@@ -51,7 +51,7 @@ const store = multer.diskStorage({
     callback(null,__dirname+"/public/posts")
     },
     filename:(req,file,callback)=>{
-     callback(null, Date.now()+file.originalname)
+     callback(null,'ola'+file.originalname)
      }
   })
   var images = multer({storage:store});
