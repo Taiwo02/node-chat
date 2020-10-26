@@ -124,7 +124,15 @@ io.on("connection", (socket) => {
     let friends = []
     groupjoins.find({$or:[{first:data.user},{second:data.user}]},(err,friend)=>{
       friend.map(s=>{
-        chatModel.findOne({email:s.second},usersProjection ,(err, res)=>{
+          let fst = s.first;
+       let sec = s.second;
+       var us;
+       if (fst!=data.user) {
+         us = fst
+       } else if(sec!=data.user){
+          us = sec;
+       }
+        chatModel.findOne({email:s.us},usersProjection ,(err, res)=>{
           friends.push(res);
           socket.emit("friends",friends)
       })
