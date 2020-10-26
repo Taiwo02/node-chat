@@ -11,8 +11,9 @@ import {Friends} from './groups'
   providedIn: 'root'
 })
 export class DocumentService {
-  imgurl = 'http://localhost/chat-app/public/upload/';
-  imgurlPost = 'http://localhost/chat-app/public/posts/';
+  
+  imgurl = 'https://chat-node-angular.herokuapp.com/public/upload/';
+  imgurlPost = 'https://chat-node-angular.herokuapp.com/public/posts/';
   
   public groupname;
   user:any;
