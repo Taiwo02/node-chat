@@ -45,7 +45,7 @@ export class ImageComponent implements OnInit {
     formData.append('file',this.username)
     // console.log(formData)
       // console.log(formData)
-    this.http.post<any>('https://talkerses.herokuapp.com/file',formData).subscribe(
+    this.http.post<any>('https://chat-node-angular.herokuapp.com/file',formData).subscribe(
       (req)=> {
         // console.log(req)
       //  console.log(req.path.slice(40));
@@ -58,18 +58,18 @@ export class ImageComponent implements OnInit {
       )
   }
   test(a){
-    if(a!=""){
-       this.img = a.target.files[0];
-    } 
+    // if(a!=""){
+    //    this.img = a.target.files[0];
+    // } 
   }
     onSubmit(){
-        console.log(this.img)
-        const formData = new FormData();
-        formData.append('file',this.img)
-         this.http.post<any>('https://talkerses.herokuapp.com/file',formData).subscribe(
-           (req)=> console.log(req),
-           (error)=>console.log(error)
-         )
+        // console.log(this.img)
+        // const formData = new FormData();
+        // formData.append('file',this.img)
+        //  this.http.post<any>('https://chat-node-angular.herokuapp.com/file',formData).subscribe(
+        //    (req)=> console.log(req),
+        //    (error)=>console.log(error)
+        //  )
  
   }
 }
