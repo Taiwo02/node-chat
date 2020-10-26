@@ -12,7 +12,7 @@ import {Friends} from './groups'
 })
 export class DocumentService {
   
-  imgurl = 'https://chat-node-angular.herokuapp.com/public/upload/';
+  imgurl = 'https://chat-node-angular.herokuapp.com/dist/socket-app/public/upload/';
   imgurlPost = 'https://chat-node-angular.herokuapp.com/public/posts/';
   
   public groupname;
