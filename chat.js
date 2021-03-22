@@ -56,7 +56,9 @@ const store = multer.diskStorage({
   })
   var images = multer({storage:store});
               // mongodb+srv://Taiwo:08102637956@local.2trri.mongodb.net/chats?retryWrites=true&w=majority
-  mongoose.connect('mongodb+srv://Taiwo:08102637956@local.2trri.mongodb.net/chats?retryWrites=true&w=majority', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
+// mongodb+srv://Taiwo:08102637956@local.2trri.mongodb.net/chats?retryWrites=true&w=majority
+                    
+  mongoose.connect('mongodb+srv://Taiwo:08102637956@Ta@cluster0.lyrtx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
 // mongoose.connect('mongodb://localhost/local', { useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  });
 
 let user_schema= mongoose.Schema({
